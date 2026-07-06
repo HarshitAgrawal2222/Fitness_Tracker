@@ -1,26 +1,39 @@
-import { Route, Routes } from "react-router-dom"
-import Layout from "./pages/Layout"
-import Dashboard from "./pages/Dashboard"
-import ActivityLog from "./pages/ActivityLog"
-import FoodLog from "./pages/FoodLog"
-import Profile from "./pages/Profile"
-
+import { Route, Routes } from "react-router-dom";
+import Layout from "./pages/Layout";
+import Dashboard from "./pages/Dashboard";
+import ActivityLog from "./pages/ActivityLog";
+import FoodLog from "./pages/FoodLog";
+import Profile from "./pages/Profile";
+import Login from "./pages/Login";
+import { useAppContext } from "./context/AppContext";
+import Loading from "./components/Loading";
+import Onboarding from "./pages/Onboarding";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
+  const { user, isUserFetched,onboardingCompleted } = useAppContext();
+
+  if (!user) {
+    return isUserFetched ? <Login/> : <Loading />
+  }
+
+  if(!onboardingCompleted){
+    return <Onboarding />
+  }
+
   return (
-   <>
-   <Routes>
-    <Route path="/" element={<Layout/>}>
-    <Route index element={<Dashboard/>}/>
-    <Route path="activity" element={<ActivityLog/>}/>
-    <Route path="food" element={<FoodLog/>}/>
-    <Route path="profile" element={<Profile/>}/>
+    <>
+    <Toaster/>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Dashboard />} />
+        <Route path="activity" element={<ActivityLog />} />
+        <Route path="food" element={<FoodLog />} />
+        <Route path="profile" element={<Profile />} />
+      </Route>
+    </Routes>
+    </>
+  );
+};
 
-    </Route>
-
-   </Routes>
-   </>
-  )
-}
-
-export default App
+export default App;
